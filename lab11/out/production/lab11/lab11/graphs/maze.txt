@@ -1,0 +1,21 @@
+<<<<<<< HEAD
+N = 8
+rseed = 4
+
+%MazeType = SINGLE_GAP
+MazeType = POPEN_SOLVABLE
+%MazeType = BLANK
+
+pOpen = 0.48
+DRAW_DELAY_MS = 30
+=======
+N = 8
+rseed = 4
+
+%MazeType = SINGLE_GAP
+MazeType = POPEN_SOLVABLE
+%MazeType = BLANK
+
+pOpen = 0.48
+DRAW_DELAY_MS = 30
+>>>>>>> 7afade8f1c7ec3c5c20e6a621ffec6bb636477bf
