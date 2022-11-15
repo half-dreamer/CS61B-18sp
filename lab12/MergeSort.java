@@ -75,7 +75,7 @@ public class MergeSort {
         // Your code here!
         Queue<Item> leftQueue = new Queue<>();
         Queue<Item> rightQueue = new Queue<>();
-        if (items.size() == 1) {
+        if (items.size() == 1 || items.isEmpty()) {
             return items;
         }
         int mid = items.size() / 2;
