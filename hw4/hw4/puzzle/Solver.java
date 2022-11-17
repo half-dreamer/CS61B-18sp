@@ -8,13 +8,16 @@ import java.util.Comparator;
 import java.util.Stack;
 
 public class Solver {
-    int solutionMoves;
-    WorldState startState;
-    searchNode targetNode;
-    int everEnqueueNum = 0;
+    private int solutionMoves;
+    private WorldState startState;
+    private searchNode targetNode;
+    private int everEnqueueNum = 0;
 
+    public int getEverEnqueueNum() {
+        return everEnqueueNum;
+    }
 
-    public class searchNode {
+    private class searchNode {
         WorldState worldState;
         int moves;
         searchNode prevNode;
@@ -57,7 +60,7 @@ public class Solver {
 
     }
 
-    public class PriorityComparator implements Comparator<searchNode> {
+    private class PriorityComparator implements Comparator<searchNode> {
         @Override
         public int compare(searchNode w1,searchNode w2) {
             /** caching trick is really important ,if you don't use the trick

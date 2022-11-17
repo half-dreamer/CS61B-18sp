@@ -1,15 +1,15 @@
 package hw4.puzzle;
 import edu.princeton.cs.algs4.Queue;
 
-public class Board implements WorldState{
+public class Board implements WorldState {
     private int[][] tiles;
-    final int BLANK = 0;
+    private final int BLANK = 0;
 
     public Board(int[][] tiles) {
         int size  = tiles.length;
         this.tiles = new int[size][size];
-        for (int i = 0 ; i < size ; i++ ) {
-            for (int j = 0; j < size ; j++) {
+        for (int i = 0 ;i < size;i++) {
+            for (int j = 0;j < size;j++) {
                 this.tiles[i][j] = tiles[i][j];
             }
         }
@@ -62,15 +62,15 @@ public class Board implements WorldState{
         return neighbors;
     }
     /** @return  real num of the tile */
-    private int castTo1D (int i,int j ) {
-        return (j+1)+ i*tiles.length;
+    private int castTo1D(int i, int j) {
+        return (j + 1) + i * tiles.length;
     }
 
     public int hamming() {
         int sumOfWrongPosi = 0;
-        for (int i = 0; i < size() ; i++ ) {
-            for (int j = 0 ; j < size() ; j++ ) {
-                if (tileAt(i, j) != castTo1D(i, j) && tileAt(i,j) != BLANK) {
+        for (int i = 0;i < size();i++) {
+            for (int j = 0;j < size();j++) {
+                if (tileAt(i,j) != castTo1D(i,j) && tileAt(i,j) != BLANK) {
                     sumOfWrongPosi += 1;
                 }
             }
@@ -80,13 +80,13 @@ public class Board implements WorldState{
 
     public int manhattan() {
         int manhattanSum = 0;
-        for (int i = 0 ;i < size(); i++) {
-            for (int j = 0;j < size() ; j++) {
+        for (int i = 0;i < size();i++) {
+            for (int j = 0;j < size();j++) {
                 if (tileAt(i,j) == 0) {
                     continue;
                 }
                 int targetX = (tileAt(i,j) - 1) % size() ;
-                int targetY = (tileAt(i,j)-1) / size() ;
+                int targetY = (tileAt(i,j) - 1) / size() ;
                 manhattanSum += Math.abs(i - targetY) + Math.abs(j - targetX);
             }
         }
@@ -102,8 +102,8 @@ public class Board implements WorldState{
         } else if(((Board) y).size() != this.size()) {
             return false;
         } else {
-            for (int i = 0;i < size() ; i++ ) {
-                for (int j = 0 ; j < size() ; j ++ ) {
+            for (int i = 0;i < size();i++) {
+                for (int j = 0;j < size() ;j ++) {
                     if (this.tileAt(i,j) != ((Board) y).tileAt(i,j)) {
                         return false;
                     }
@@ -124,6 +124,9 @@ public class Board implements WorldState{
         }
         s.append("\n");
         return s.toString();
+    }
+    public int hashCode() {
+        return this.hashCode();
     }
 
 }
