@@ -10,7 +10,7 @@ public class SeamCarver {
     private int height;
     private boolean isVertival = true;
     public SeamCarver(Picture picture) {
-        this.picture = picture;
+        this.picture = new Picture(picture);
         // note : I didn't create a new Picture object
         width = width();
         height = height();
@@ -61,13 +61,9 @@ public class SeamCarver {
     private void buildEnergyArray() {
         for (int x = 0 ; x < width ; x++) {
             for (int y = 0 ; y < height; y++) {
-                if (isVertival) {
                     energys[x][y] = energy(x, y);
-                } else {
-                    energys[x][y] = energy(y,x);
                 }
             }
-        }
     }
 
 
@@ -127,25 +123,25 @@ public class SeamCarver {
             return path;
         } else {
             for (int y = height - 1; y >= 1; y--) {
-                if (curX < 1) {
+                if (curX == 0) {
                     for (int x = curX;x <= curX+1;x++) {
                         if (costs[x][y-1] + energys[curX][y] == costs[curX][y]) {
-                            path[y-1] = curX;
                             curX = x;
+                            path[y-1] = curX;
                         }
                     }
                 } else if (curX == width -1) {
                     for (int x = curX-1; x <= curX;x++) {
                         if (costs[x][y-1] + energys[curX][y] == costs[curX][y]) {
-                            path[y-1] = curX;
                             curX = x;
+                            path[y-1] = curX;
                         }
                     }
                 } else {
                     for (int x = curX-1; x <= curX+1; x++) {
                         if (costs[x][y-1] + energys[curX][y] == costs[curX][y]) {
-                            path[y-1] = curX;
                             curX = x;
+                            path[y-1] = curX;
                         }
                     }
                 }
