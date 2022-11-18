@@ -128,20 +128,24 @@ public class SeamCarver {
                         if (costs[x][y-1] + energys[curX][y] == costs[curX][y]) {
                             curX = x;
                             path[y-1] = curX;
+                            break;
                         }
                     }
-                } else if (curX == width -1) {
+                } else if (curX >= width -1) {
                     for (int x = curX-1; x <= curX;x++) {
                         if (costs[x][y-1] + energys[curX][y] == costs[curX][y]) {
                             curX = x;
                             path[y-1] = curX;
+                            break;
                         }
                     }
                 } else {
                     for (int x = curX-1; x <= curX+1; x++) {
+
                         if (costs[x][y-1] + energys[curX][y] == costs[curX][y]) {
                             curX = x;
                             path[y-1] = curX;
+                            break;
                         }
                     }
                 }
