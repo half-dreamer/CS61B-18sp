@@ -81,7 +81,11 @@ public class SeamCarver {
             for (y = 1; y < height;y++) {
                 for (int x = 0;x < width;x++) {
                     if (x == 0) {
-                        costs[x][y] = energys[x][y] + Math.min(costs[x][y-1],costs[x+1][y-1]);
+                        if (width == 1) {
+                            costs[x][y] = energys[x][y] + costs[x][y-1];
+                        } else {
+                            costs[x][y] = energys[x][y] + Math.min(costs[x][y - 1], costs[x + 1][y - 1]);
+                        }
                     } else if (x == width - 1) {
                         costs[x][y] = energys[x][y] + Math.min(costs[x][y-1],costs[x-1][y-1]);
                     } else {
