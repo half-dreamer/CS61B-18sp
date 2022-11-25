@@ -4,8 +4,9 @@ import org.xml.sax.helpers.DefaultHandler;
 
 import java.util.Arrays;
 import java.util.HashSet;
+import java.util.LinkedList;
 import java.util.Set;
-
+import java.util.List;
 /**
  *  Parses OSM XML files using an XML SAX parser. Used to construct the graph of roads for
  *  pathfinding, under some constraints.
@@ -33,11 +34,12 @@ public class GraphBuildingHandler extends DefaultHandler {
      * actually drive on them.
      */
     private static final Set<String> ALLOWED_HIGHWAY_TYPES = new HashSet<>(Arrays.asList
-            ("motorway", "trunk", "primary", "secondary", "tertiary", "unclassified",
-                    "residential", "living_street", "motorway_link", "trunk_link", "primary_link",
+            ("motorway", "trunk", "primary", "secondary", "tertiary", "unclassified", "residential", "living_street", "motorway_link", "trunk_link", "primary_link",
                     "secondary_link", "tertiary_link"));
     private String activeState = "";
     private final GraphDB g;
+    private boolean isWayValid = false;
+    private List<Long> curWayNodes = new LinkedList<Long>(); // only store the id of nodes
 
     /**
      * Create a new GraphBuildingHandler.
@@ -74,11 +76,15 @@ public class GraphBuildingHandler extends DefaultHandler {
 
             /* TODO Use the above information to save a "node" to somewhere. */
             /* Hint: A graph-like structure would be nice. */
+            GraphDB.Node node = new GraphDB.Node(attributes.getValue("id"),attributes.getValue("lon"),attributes.getValue("lat"));
+            g.addNode(node);
 
         } else if (qName.equals("way")) {
             /* We encountered a new <way...> tag. */
             activeState = "way";
+            curWayNodes.clear();
 //            System.out.println("Beginning a way...");
+
         } else if (activeState.equals("way") && qName.equals("nd")) {
             /* While looking at a way, we found a <nd...> tag. */
             //System.out.println("Id of a node in this way: " + attributes.getValue("ref"));
@@ -89,6 +95,7 @@ public class GraphBuildingHandler extends DefaultHandler {
             cumbersome since you might have to remove the connections if you later see a tag that
             makes this way invalid. Instead, think of keeping a list of possible connections and
             remember whether this way is valid or not. */
+            curWayNodes.add(Long.parseLong(attributes.getValue("ref")));
 
         } else if (activeState.equals("way") && qName.equals("tag")) {
             /* While looking at a way, we found a <tag...> tag. */
@@ -101,6 +108,9 @@ public class GraphBuildingHandler extends DefaultHandler {
                 //System.out.println("Highway type: " + v);
                 /* TODO Figure out whether this way and its connections are valid. */
                 /* Hint: Setting a "flag" is good enough! */
+                if (ALLOWED_HIGHWAY_TYPES.contains(v)) {
+                    isWayValid = true;
+                }
             } else if (k.equals("name")) {
                 //System.out.println("Way Name: " + v);
             }
@@ -134,6 +144,18 @@ public class GraphBuildingHandler extends DefaultHandler {
             /* Hint1: If you have stored the possible connections for this way, here's your
             chance to actually connect the nodes together if the way is valid. */
 //            System.out.println("Finishing a way...");
+            if (isWayValid) {
+                GraphDB.Node curNode = null;
+                for (Long nodeID : curWayNodes) {
+                    GraphDB.Node nextNode = g.nodes.get(nodeID);
+                    if (curNode != null) {
+                        nextNode.addAdj(curNode);
+                        curNode.addAdj(nextNode);
+                    }
+                    curNode = nextNode;
+                }
+            }
+            isWayValid = false;
         }
     }
 
