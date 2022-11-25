@@ -1,3 +1,4 @@
+import com.sun.org.apache.bcel.internal.generic.I2D;
 import org.xml.sax.SAXException;
 
 import java.io.File;
@@ -27,16 +28,42 @@ public class GraphDB {
     public static class Node {
         public long id;
         public double lon,lat;
+        public double dist = 0;
         public Set adjs = new HashSet<Long>();
+        public double priority;
         public Node (String id,String lon,String lat) {
             this.id = Long.parseLong(id);
             this.lon = Double.parseDouble(lon);
             this.lat = Double.parseDouble(lat);
         }
+        public double getPriority () {
+            return priority;
+        }
 
         public void addAdj(Node node) {
             this.adjs.add(node.id);
         }
+
+        public void setDist(double dist) {
+            this.dist = dist;
+        }
+
+        public double getDist() {
+            return dist;
+        }
+    }
+    public  class PQComparator implements Comparator<Long> {
+        @Override
+        public int compare (Long ID1,Long ID2) {
+        return (int)(nodes.get(ID1).priority - nodes.get(ID2).priority);
+        }
+    }
+    public Comparator<Long> getPQComparator() {
+        return new PQComparator();
+    }
+
+    public Node getNode (Long NodeID) {
+        return nodes.get(NodeID);
     }
 
     public void addNode (Node node) {

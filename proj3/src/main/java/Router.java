@@ -1,8 +1,6 @@
-import java.util.List;
-import java.util.Objects;
+import java.util.*;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
-
 /**
  * This class provides a shortestPath method for finding routes between two points
  * on the map. Start by using Dijkstra's, and if your code isn't fast enough for your
@@ -12,6 +10,7 @@ import java.util.regex.Pattern;
  * down to the priority you use to order your vertices.
  */
 public class Router {
+
     /**
      * Return a List of longs representing the shortest path from the node
      * closest to a start location and the node closest to the destination
@@ -23,10 +22,36 @@ public class Router {
      * @param destlat The latitude of the destination location.
      * @return A list of node id's in the order visited on the shortest path.
      */
-    public static List<Long> shortestPath(GraphDB g, double stlon, double stlat,
-                                          double destlon, double destlat) {
-        return null; // FIXME
+    public static List<Long> shortestPath(GraphDB g, double stlon, double stlat, double destlon, double destlat) {
+
+        Set isvisited = new HashSet<Long>();
+        Map<Long,Long> edgeTo = new HashMap<>();
+        Long startNodeID = g.closest(stlon,stlat);
+        Long destNodeID = g.closest(destlon,destlat);
+        Long deleteNodeID;
+
+        PriorityQueue<Long> PQOfNode = new PriorityQueue<>(g.getPQComparator());
+        PQOfNode.add(startNodeID);
+        while (!PQOfNode.isEmpty()) {
+            deleteNodeID = PQOfNode.remove();
+            isvisited.add(deleteNodeID);
+            if (deleteNodeID == destNodeID) {
+                break;
+            }
+            for (Long neighbourID : g.adjacent(deleteNodeID)) {
+                if (isvisited.contains(neighbourID)) {
+                    continue;
+                } else {
+                    if (g.getNode(destNodeID).getDist() + g.distance())
+                }
+            }
+        }
     }
+
+
+
+
+
 
     /**
      * Create the list of directions corresponding to a route on the graph.
